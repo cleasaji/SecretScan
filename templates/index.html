@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SecretScan</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="container">
+    <section class="hero">
+      <p class="eyebrow">SOURCE CODE SECURITY</p>
+      <h1>SecretScan</h1>
+      <p>Find potentially exposed credentials before they reach your repository.</p>
+    </section>
+
+    <section class="card">
+      <label for="filename">File name</label>
+      <input id="filename" type="text" value="demo.env">
+
+      <label for="source">Paste source code or configuration</label>
+      <textarea id="source" placeholder='API_KEY = "sk_test_1234567890abcdef"'></textarea>
+
+      <button id="scanBtn">Scan for Secrets</button>
+      <p id="status" class="status"></p>
+    </section>
+
+    <section class="card">
+      <div class="result-header">
+        <h2>Scan Results</h2>
+        <span id="count" class="badge">0 findings</span>
+      </div>
+      <div id="results" class="results">
+        <p class="muted">Run a scan to see results.</p>
+      </div>
+    </section>
+  </main>
+
+<script>
+const scanBtn = document.getElementById("scanBtn");
+const results = document.getElementById("results");
+const count = document.getElementById("count");
+const status = document.getElementById("status");
+
+scanBtn.addEventListener("click", async () => {
+  const text = document.getElementById("source").value;
+  const filename = document.getElementById("filename").value || "input.txt";
+
+  status.textContent = "Scanning...";
+  results.innerHTML = "";
+
+  try {
+    const response = await fetch("/scan", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({text, filename})
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) throw new Error(data.error || "Scan failed");
+
+    count.textContent = `${data.count} finding${data.count === 1 ? "" : "s"}`;
+    status.textContent = "Scan completed.";
+
+    if (data.findings.length === 0) {
+      results.innerHTML = '<p class="safe">✓ No matching secrets detected.</p>';
+      return;
+    }
+
+    data.findings.forEach(finding => {
+      const item = document.createElement("div");
+      item.className = "finding";
+      item.innerHTML = `
+        <div>
+          <strong>${escapeHtml(finding.type)}</strong>
+          <p>Line ${finding.line} · ${escapeHtml(finding.file)}</p>
+        </div>
+        <div class="details">
+          <span class="risk ${finding.risk.toLowerCase()}">${escapeHtml(finding.risk)}</span>
+          <code>${escapeHtml(finding.value)}</code>
+          <small>Entropy: ${finding.entropy}</small>
+        </div>
+      `;
+      results.appendChild(item);
+    });
+  } catch (error) {
+    status.textContent = error.message;
+  }
+});
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
+  }[char]));
+}
+</script>
+</body>
+</html>

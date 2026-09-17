@@ -1,0 +1,153 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f7fb;
+  color: #1d2433;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.hero {
+  margin-bottom: 25px;
+}
+
+.eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #667085;
+}
+
+h1 {
+  font-size: 42px;
+  margin: 8px 0;
+}
+
+.hero p:last-child {
+  color: #667085;
+}
+
+.card {
+  background: white;
+  border: 1px solid #e4e7ec;
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 3px 12px rgba(16, 24, 40, 0.05);
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin: 10px 0 8px;
+}
+
+input, textarea {
+  width: 100%;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  padding: 12px;
+  font: inherit;
+}
+
+textarea {
+  min-height: 220px;
+  resize: vertical;
+  font-family: Consolas, monospace;
+}
+
+button {
+  margin-top: 16px;
+  border: 0;
+  border-radius: 8px;
+  padding: 12px 18px;
+  background: #1d2939;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.status, .muted {
+  color: #667085;
+}
+
+.result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.badge {
+  background: #eef2f6;
+  padding: 7px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+}
+
+.finding {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  border: 1px solid #eaecf0;
+  border-radius: 10px;
+  padding: 15px;
+  margin-top: 12px;
+}
+
+.finding p {
+  margin: 6px 0 0;
+  color: #667085;
+  font-size: 14px;
+}
+
+.details {
+  text-align: right;
+}
+
+.risk {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.critical { font-weight: 800; }
+.high { font-weight: 700; }
+.medium { font-weight: 600; }
+
+code {
+  display: block;
+  margin-bottom: 5px;
+  word-break: break-all;
+}
+
+small {
+  color: #667085;
+}
+
+.safe {
+  font-weight: 600;
+}
+
+@media (max-width: 650px) {
+  .finding {
+    flex-direction: column;
+  }
+
+  .details {
+    text-align: left;
+  }
+}
